@@ -1,0 +1,33 @@
+server:
+  port: 8181
+
+spring:
+  application:
+    name: ApiGatewayBlogBE
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: BlogBE-service
+              uri: http://localhost:8081
+              predicates:
+               - Path=/BlogBE/v3/api-docs
+              filters:
+               - StripPrefix=1
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: Gateway
+        url: /v3/api-docs
+      - name: BlogBE
+        url: /BlogBE/v3/api-docs
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
